@@ -7,11 +7,10 @@ router.get('/', (req, res) => {
     res.render('inicio');
 });
 
-// Ruta protegida para "Pedidos" (accesible por meseros y cocineros)
 router.get('/pedidos', verificarAutenticacion, (req, res) => {
     const sqlMesas = 'SELECT DISTINCT mesa FROM comandas';
     const sqlMeseros = 'SELECT DISTINCT mesero FROM comandas';
-    const sqlComandas = 'SELECT * FROM comandas ORDER BY hora DESC'; // Ordenar por hora descendente
+    const sqlComandas = 'SELECT * FROM comandas ORDER BY hora DESC';
 
     req.db.query(sqlMesas, (err, mesasResults) => {
         if (err) throw err;
@@ -27,7 +26,6 @@ router.get('/pedidos', verificarAutenticacion, (req, res) => {
                         .map(item => `${item.nombre} x${item.cantidad}`)
                         .join(', ');
 
-                    // Formatear la fecha y hora
                     const fecha = new Date(comanda.hora);
                     comanda.hora = fecha.toLocaleString('es-MX', {
                         dateStyle: 'short',
@@ -38,9 +36,9 @@ router.get('/pedidos', verificarAutenticacion, (req, res) => {
 
                 res.render('pedidos', {
                     mesas: mesasResults,
-                    meseros: meserosResults, // Pasar los meseros a la vista
+                    meseros: meserosResults,
                     comandas: comandasResults,
-                    user: req.session.user // Pasar el usuario a la vista
+                    user: req.session.user
                 });
             });
         });
@@ -48,17 +46,15 @@ router.get('/pedidos', verificarAutenticacion, (req, res) => {
 });
 
 router.get('/pedidos/buscar', verificarAutenticacion, (req, res) => {
-    const { mesa, mesero } = req.query; // Obtener los parámetros de búsqueda
-    let sql = 'SELECT * FROM comandas WHERE 1=1'; // Consulta base
+    const { mesa, mesero } = req.query;
+    let sql = 'SELECT * FROM comandas WHERE 1=1';
     const params = [];
 
-    // Agregar filtro por mesa si está presente
     if (mesa) {
         sql += ' AND mesa = ?';
         params.push(mesa);
     }
 
-    // Agregar filtro por mesero si está presente
     if (mesero) {
         sql += ' AND mesero = ?';
         params.push(mesero);
@@ -70,20 +66,17 @@ router.get('/pedidos/buscar', verificarAutenticacion, (req, res) => {
         const sqlMesas = 'SELECT DISTINCT mesa FROM comandas';
         const sqlMeseros = 'SELECT DISTINCT mesero FROM comandas';
 
-        // Consultar mesas y meseros para los filtros
         req.db.query(sqlMesas, (err, mesasResults) => {
             if (err) throw err;
 
             req.db.query(sqlMeseros, (err, meserosResults) => {
                 if (err) throw err;
 
-                // Formatear los resultados de las comandas
                 results.forEach(comanda => {
                     comanda.platillos = JSON.parse(comanda.platillos)
                         .map(item => `${item.nombre} x${item.cantidad}`)
                         .join(', ');
 
-                    // Formatear la fecha y hora
                     const fecha = new Date(comanda.hora);
                     comanda.hora = fecha.toLocaleString('es-MX', {
                         dateStyle: 'short',
@@ -92,24 +85,22 @@ router.get('/pedidos/buscar', verificarAutenticacion, (req, res) => {
                     });
                 });
 
-                // Renderizar la vista con los resultados
                 res.render('pedidos', {
                     mesas: mesasResults,
                     meseros: meserosResults,
                     comandas: results,
-                    user: req.session.user // Pasar el usuario a la vista
+                    user: req.session.user
                 });
             });
         });
     });
 });
 
-// Ruta protegida para "Menú" (accesible por meseros y cocineros)
 router.get('/menu', verificarAutenticacion, (req, res) => {
     const sql = 'SELECT * FROM menu';
     req.db.query(sql, (err, results) => {
         if (err) throw err;
-        res.render('menu', { menu: results, user: req.session.user }); // Pasar el usuario a la vista
+        res.render('menu', { menu: results, user: req.session.user });
     });
 });
 
@@ -168,7 +159,6 @@ router.post('/pedidos', (req, res) => {
     });
 });
 
-// Ruta pública para clientes (no requiere autenticación)
 router.get('/ordenar', accesoPublico, (req, res) => {
     const sqlMesas = 'SELECT DISTINCT mesa FROM comandas';
     const sqlMeseros = 'SELECT DISTINCT mesero FROM comandas';
@@ -180,7 +170,6 @@ router.get('/ordenar', accesoPublico, (req, res) => {
         req.db.query(sqlMeseros, (err, meserosResults) => {
             if (err) throw err;
 
-            // Seleccionar un mesero aleatorio
             const meseroAleatorio = meserosResults.length > 0
                 ? meserosResults[Math.floor(Math.random() * meserosResults.length)].mesero
                 : 'Sin mesero disponible';
@@ -190,7 +179,7 @@ router.get('/ordenar', accesoPublico, (req, res) => {
 
                 res.render('ordenar', {
                     mesas: mesasResults,
-                    meseroAleatorio, // Pasar el mesero aleatorio a la vista
+                    meseroAleatorio,
                     menu: menuResults
                 });
             });
@@ -228,13 +217,13 @@ router.post('/login', (req, res) => {
         if (results.length > 0) {
             const user = results[0];
             if (bcrypt.compareSync(password, user.password)) {
-                req.session.user = { id: user.id, rol: user.rol }; // Guardar el usuario en la sesión
-                res.redirect('/pedidos'); // Redirigir a "Pedidos" para ambos roles
+                req.session.user = { id: user.id, rol: user.rol };
+                res.redirect('/pedidos');
             } else {
-                res.render('login', { error: 'Contraseña incorrecta' }); // Mostrar aviso de error
+                res.render('login', { error: 'Contraseña incorrecta' });
             }
         } else {
-            res.render('login', { error: 'Usuario no encontrado' }); // Mostrar aviso de error
+            res.render('login', { error: 'Usuario no encontrado' });
         }
     });
 });

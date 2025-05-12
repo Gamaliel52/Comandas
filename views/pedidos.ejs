@@ -42,7 +42,6 @@
                 <h1 class="mb-4">Historial de Pedidos</h1>
                 <form action="/pedidos/buscar" method="GET" class="mb-4">
                     <div class="row">
-                        <!-- Campo para seleccionar mesa -->
                         <div class="col-md-6">
                             <label for="mesa" class="form-label">Número de Mesa</label>
                             <select class="form-select" id="mesa" name="mesa">
@@ -52,8 +51,6 @@
                                 <% }); %>
                             </select>
                         </div>
-
-                        <!-- Campo para seleccionar mesero -->
                         <div class="col-md-6">
                             <label for="mesero" class="form-label">Mesero</label>
                             <select class="form-select" id="mesero" name="mesero">
@@ -63,8 +60,6 @@
                                 <% }); %>
                             </select>
                         </div>
-
-                        <!-- Botón de búsqueda -->
                         <div class="col-12 d-flex justify-content-end mt-3">
                             <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
@@ -76,7 +71,7 @@
                             <th>ID</th>
                             <th>Mesa</th>
                             <th>Mesero</th>
-                            <th class="w-50">Platillos</th> <!-- Extender la columna de platillos -->
+                            <th class="w-50">Platillos</th>
                             <th>Hora</th>
                         </tr>
                     </thead>
@@ -86,7 +81,7 @@
                             <td><%= comanda.id %></td>
                             <td><%= comanda.mesa %></td>
                             <td><%= comanda.mesero %></td>
-                            <td><%= comanda.platillos %></td> <!-- Mostrar los platillos -->
+                            <td><%= comanda.platillos %></td>
                             <td><%= comanda.hora %></td>
                         </tr>
                         <% }); %>

@@ -149,11 +149,9 @@
                 const subtotal = precio * cantidad;
                 total += subtotal;
 
-                // Agregar al array de la orden
                 const index = orden.length;
                 orden.push({ nombre, cantidad, precio });
 
-                // Actualizar el resumen
                 const li = document.createElement('li');
                 li.className = 'list-group-item d-flex justify-content-between align-items-center';
                 li.innerHTML = `
@@ -162,7 +160,6 @@
                 `;
                 listaOrden.appendChild(li);
 
-                // Actualizar el total y el campo oculto
                 totalElement.textContent = total.toFixed(2);
                 ordenDataInput.value = JSON.stringify(orden);
             } else {
@@ -180,11 +177,9 @@
                 const subtotal = precio * cantidad;
                 total += subtotal;
 
-                // Agregar al array de la orden
                 const index = orden.length;
                 orden.push({ nombre, cantidad, precio });
 
-                // Actualizar el resumen
                 const li = document.createElement('li');
                 li.className = 'list-group-item d-flex justify-content-between align-items-center';
                 li.innerHTML = `
@@ -193,7 +188,6 @@
                 `;
                 listaOrden.appendChild(li);
 
-                // Actualizar el total y el campo oculto
                 totalElement.textContent = total.toFixed(2);
                 ordenDataInput.value = JSON.stringify(orden);
             } else {
@@ -219,11 +213,9 @@
         });
 
         function eliminarElemento(index) {
-            // Eliminar el elemento del array de la orden
             const eliminado = orden.splice(index, 1)[0];
             total -= eliminado.precio * eliminado.cantidad;
 
-            // Actualizar el resumen
             listaOrden.innerHTML = '';
             orden.forEach((item, i) => {
                 const li = document.createElement('li');
@@ -235,7 +227,6 @@
                 listaOrden.appendChild(li);
             });
 
-            // Actualizar el total y el campo oculto
             totalElement.textContent = total.toFixed(2);
             ordenDataInput.value = JSON.stringify(orden);
         }

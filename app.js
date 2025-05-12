@@ -11,18 +11,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Middleware para procesar JSON
 app.use(express.json());
-
-// Middleware para procesar datos codificados en URL (si usas formularios tradicionales)
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración de sesiones
 app.use(session({
-    secret: 'mi_secreto_seguro', // Cambia esto por una cadena segura
+    secret: 'mi_secreto_seguro',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Cambia a true si usas HTTPS
+    cookie: { secure: false }
 }));
 
 const db = mysql.createConnection({
