@@ -41,6 +41,6 @@ app.use((req, res, next) => {
 app.use('/', rutas);
 
 const PORT = 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+app.listen(PORT, 'localhost', () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
